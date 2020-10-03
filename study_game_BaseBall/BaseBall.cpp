@@ -2,44 +2,50 @@
 # include<time.h>
 using namespace std;
 
-int main() {
+int BaseBall[9];
+
+void Swap(int *a, int *b) {
+	int temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+//숫자 야구 9개의 숫자를 각각의 배열에 저장
+void initBaseBall() {
+	for (int i = 0; i < 9; i++) {
+		BaseBall[i] = i + 1;
+	}
+}
+
+void Shuffle() {
+	int index1, index2;
 	srand((unsigned int)time(0));
-	int BaseBall[9];
+
+	//저장된 로또넘버를 100번 셔플
+	for (int i = 0; i < 100; i++) {
+		index1 = rand() % 45;
+		index2 = rand() % 45;
+
+		Swap(&BaseBall[index1], &BaseBall[index2]);
+	}
+}
+
+int main() {
 	int User[3];
-	int Temp, Index1, Index2;
 	int strike = 0, ball = 0;
 
-	//BaseBall배열에 1~9까지의 숫자를 저장
-	for (int i = 0; i < 9; i++)
-		BaseBall[i] = i + 1;
-
-	//저장된 배열을 100번 섞어줘 완벽하게 랜덤한 숫자를 만듬
-	for (int i = 0; i < 100; i++) {
-		Index1 = rand() % 9;
-		Index2 = rand() % 9;
-
-		Temp = BaseBall[Index1];
-		BaseBall[Index1] = BaseBall[Index2];
-		BaseBall[Index2] = Temp;
-	}
-
-	/*
-	//저장된 숫자 확인
-	for (int i = 0; i < 3; i++)
-		cout << BaseBall[i] << "\t";
-	cout <<""<< endl;
-	*/
-	
-	
-	
-
+	Shuffle();
 
 	while (1) {
+		//사용자 입력
 		cout << "1~9 사이의 숫자를 입력하세요(0일 때 종료) : ";
 		for (int i = 0; i < 3; i++) {
 			cin >> User[i];
 		}
 
+		//예외 처리
 		if (User[0] == 0 || User[1] == 0 || User[2] == 0) {
 			cout << "게임을 종료 합니다." << endl;
 			cout << "" << endl;
@@ -56,40 +62,7 @@ int main() {
 			continue;
 		}
 		
-		/*
-		//입력한 숫자 확인
-		for (int i = 0; i < 3; i++) {
-			cout << User[i] << endl;
-		}
-		*/
-
-
-		/*
-		strike
-		0 0		1 1		2 2  
-
-		ball
-		0 1	+		0 2
-		1 0	+		1 2+
-		2 0			2 1+
-		*/
-		
-		/*
-		for (int i = 0; i < 3; i++) {
-			if (BaseBall[i] == User[i])
-				strike++;
-			else if (BaseBall[i] == User[i + 1])
-				ball++;
-			else if (BaseBall[i] == User[i - 1])
-				ball++;
-			else if (BaseBall[2] == User[0])
-				ball++;
-			else if (BaseBall[0] == User[2])
-				ball++;
-		}
-		*/
-
-		
+		//값 비교
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++)
 				if (BaseBall[i] == User[j]) {//배열에 있는 모든 숫자를 확인해서 같은 숫자가 있는지 확인(모든 인덱스 비교)
@@ -104,7 +77,7 @@ int main() {
 
 		if (strike == 3) {
 			cout << strike << "strike입니다." << endl;
-			cout <<"보덜덜.... 역시 태민짱...." << endl;
+			cout <<"정답입니다!" << endl;
 			break;
 		}
 		else if (strike == 0 && ball == 0) {
